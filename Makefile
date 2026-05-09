@@ -1,8 +1,11 @@
-.PHONY: setup reset setup-uv reset-uv update-uv
+.PHONY: setup reset run setup-uv reset-uv update-uv
 
 setup: setup-uv
 
 reset: reset-uv
+
+run:
+	@uv run fastapi dev main.py
 
 setup-uv:
 	@curl -LsSf https://astral.sh/uv/install.sh | sh
