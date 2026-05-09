@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 
+from settings import Settings
+
 app = FastAPI()
+settings = Settings()
 
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": "Hello, World!"}
 
