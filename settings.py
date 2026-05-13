@@ -11,5 +11,6 @@ class Settings(BaseSettings):
     API_KEY: SecretStr = Field(...)
     API_BASE_URL: str = Field(...)
     MODEL_NAME: AvailableModels = Field(...)
+    CATALOGUE_URL: str = Field(...)
 
     model_config = SettingsConfigDict(env_file=".env")

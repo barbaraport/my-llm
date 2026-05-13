@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from openai import OpenAI
 
+from routers.router import app_router
 from settings import Settings
 
 app = FastAPI()
-settings = Settings()
+app.include_router(app_router)
 
+settings = Settings()
 
 @app.get("/")
 def read_root():
