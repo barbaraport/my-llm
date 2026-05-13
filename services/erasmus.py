@@ -1,6 +1,6 @@
-from .summarizer import Summarizer
+from services.base_service import BaseService
 
 
-class Erasmus(Summarizer):
-    def summarize(self, content: str) -> str:
-        return f"Erasmus summary of: {content}"
+class ErasmusService(BaseService):
+    def summarize(self) -> str:
+        return self.summarizer.summarize("a test about erasmus mundus scholarships")

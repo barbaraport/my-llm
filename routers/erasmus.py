@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Depends
 
-from services.erasmus import Erasmus
-from services.summarizer import Summarizer
+from core.ai.ai import AI
+from core.summarizing.erasmus import ErasmusSummarizer
+from services.base_service import BaseService
+from services.erasmus import ErasmusService
+from settings.get_setting import get_setting
 
 
 erasmus_router = APIRouter(
@@ -9,9 +12,17 @@ erasmus_router = APIRouter(
     tags=["Erasmus"],
 )
 
-def get_service() -> Summarizer:
-    return Erasmus()
+def get_service() -> BaseService:
+    return ErasmusService(
+        summarizer=ErasmusSummarizer(
+            ai=AI(api_url=get_setting("API_BASE_URL"), 
+                  api_key=get_setting("API_KEY"), 
+                  model_name=get_setting("MODEL_NAME")
+                )
+            )
+        )
+    
 
 @erasmus_router.get("/")
-def erasmus_summarization(service: Summarizer = Depends(get_service)):
-    return service.summarize("Erasmus summarization endpoint")
+def erasmus_summarization(service: BaseService = Depends(get_service)):
+    return service.summarize()
