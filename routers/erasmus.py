@@ -24,7 +24,18 @@ def get_service() -> BaseService:
         )
     
 
-@erasmus_router.get("/")
+@erasmus_router.get("/",
+    summary="Summarize Erasmus scholarships",
+    description="Fetches the Erasmus scholarships from the specified catalogue URL, summarizes them using an AI model, and returns the summary as a stream of markdown content.",
+    response_description="A stream of markdown content summarizing the Erasmus scholarships.",
+    response_class=StreamingResponse,
+    responses={
+        200: {
+            "description": "Returns a continuous stream of text chunks (SSE - Server-Sent Events) that together form a markdown summary of the Erasmus scholarships.",
+            "content": {"text/event-stream": {}}
+        }
+    }
+)
 def erasmus_summarization(service: BaseService = Depends(get_service)):
     stream = service.summarize()
 
