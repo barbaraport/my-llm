@@ -1,4 +1,5 @@
-from abc import ABC
+from abc import ABC, abstractmethod
+from typing import AsyncGenerator
 
 from core.ai.ai import AI
 
@@ -7,8 +8,6 @@ class Summarizer(ABC):
     def __init__(self , ai: AI):
         self.ai = ai
     
-    def summarize(self, content: str) -> str:
-        return self.ai.prompt([{
-            "role": "user",
-            "content": f"Summarize the following content: {content}"
-        }])
+    @abstractmethod
+    def summarize(self, content: str) -> AsyncGenerator[str, None]:
+        pass

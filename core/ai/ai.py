@@ -1,4 +1,6 @@
-from openai import OpenAI
+from typing import Any, AsyncGenerator
+
+from openai import AsyncOpenAI
 
 
 class AI:
@@ -7,11 +9,15 @@ class AI:
         self._model_name = model_name
         super().__init__()
 
-    def _get_connection(self, api_url: str, api_key: str) -> OpenAI:
-        return OpenAI(base_url=api_url, api_key=api_key)
+    def _get_connection(self, api_url: str, api_key: str) -> AsyncOpenAI:
+        return AsyncOpenAI(base_url=api_url, api_key=api_key)
 
-    def prompt(self, messages: list[dict[str, str]]) -> str:
-        request = self._connection.chat.completions.create(model=self._model_name, messages=messages)
-        answer = request.choices[0].message.content
+    async def prompt(self, messages: list[Any]) -> AsyncGenerator[str, None]:
+        stream = await self._connection.chat.completions.create(model=self._model_name, messages=messages, stream=True)
         
-        return answer if answer is not None else "No answer could be provided."
+        async for chunk in stream:
+            content = chunk.choices[0].delta.content
+            if content is not None:
+                yield content or ""
+        
+        yield "###[DONE]###"

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
 
 from core.ai.ai import AI
 from core.summarizing.erasmus import ErasmusSummarizer
@@ -25,4 +26,13 @@ def get_service() -> BaseService:
 
 @erasmus_router.get("/")
 def erasmus_summarization(service: BaseService = Depends(get_service)):
-    return service.summarize()
+    stream = service.summarize()
+
+    async def stream_wrapper():
+        async for chunk in stream:
+            yield chunk
+
+    return StreamingResponse(
+        stream_wrapper(),
+        media_type="text/event-stream"
+    )
