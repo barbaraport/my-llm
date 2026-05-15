@@ -2,7 +2,9 @@
 
 setup: setup-uv
 
-reset: reset-uv
+reset: 
+	@rm -rf .venv
+	${MAKE} reset-uv
 
 run:
 	@uv run fastapi dev main.py
