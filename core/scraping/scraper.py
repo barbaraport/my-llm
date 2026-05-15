@@ -11,10 +11,17 @@ class Scraper():
         return BeautifulSoup(response.text, "lxml")
     
     @staticmethod
-    def find_in_page(page: str, tag: str, attribute: str, value: str) -> str:
+    def find_first_in_page(page: str, tag: str, attribute: str, value: str) -> str:
         website_content = Scraper._get_static_website_content(page)
         element = website_content.find(tag, attrs={attribute: value})
 
         if element is None: return ""
         
         return element.get_text(separator=" ", strip=True)
+    
+    @staticmethod
+    def find_all_by_class_name(page: str, value: str) -> list[str]:
+        website_content = Scraper._get_static_website_content(page)
+        element = website_content.select(value)
+        
+        return [e.get_text(separator=" ", strip=True) for e in element]

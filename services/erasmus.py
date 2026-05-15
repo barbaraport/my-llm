@@ -10,22 +10,29 @@ class ErasmusService(BaseService):
     async def summarize(self) -> AsyncGenerator[str, None]:
         url = get_setting("CATALOGUE_URL")
 
-        website_content = ""
-        first_page_content = Scraper.find_in_page(page=url, tag="div", attribute="class", value="ecl-content-item-block")
-        website_content += first_page_content
+        websites_content = ""
+        first_page_content = Scraper.find_first_in_page(page=url, tag="div", attribute="class", value="ecl-content-item-block")
+        websites_content += first_page_content
 
         first_page = 1
         last_page = int(
-            Scraper.find_in_page(page=url, tag="li", attribute="class", value="ecl-pagination__item ecl-pagination__item--last")
+            Scraper.find_first_in_page(page=url, tag="li", attribute="class", value="ecl-pagination__item ecl-pagination__item--last")
         )
 
+        total_projects = 0
         for page in range(first_page, last_page):
             wait_time = uniform(3, 7)
             await sleep(wait_time)
 
-            website_content += Scraper.find_in_page(page=url + f"?page={page}", tag="div", attribute="class", value="ecl-content-item-block")
+            projects = Scraper.find_all_by_class_name(page=url + f"?page={page}", value=".ecl-content-block.ecl-card__content-block")
+            if projects != []:
+                for project in projects:
+                    total_projects += 1
+                    websites_content += f"START OF PROJECT {total_projects}\n\n\n\n"
+                    websites_content += project
+                    websites_content += "END OF PROJECT\n\n\n\n"
 
-        stream =  self.summarizer.summarize(website_content)
+        stream =  self.summarizer.summarize(websites_content)
 
         async for chunk in stream:
             yield chunk

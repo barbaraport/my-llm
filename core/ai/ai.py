@@ -20,4 +20,4 @@ class AI:
             if content is not None:
                 yield content or ""
         
-        yield "###[DONE]###"
+        yield "\n\n"
