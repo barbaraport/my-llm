@@ -18,6 +18,6 @@ class AI:
         async for chunk in stream:
             content = chunk.choices[0].delta.content
             if content is not None:
-                yield content or ""
-        
+                yield f"data: {content}\n\n"
+            
         yield "\n\n"

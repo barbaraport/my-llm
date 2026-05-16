@@ -7,9 +7,9 @@ class ErasmusSummarizer(Summarizer):
     async def summarize(self, content: str) -> AsyncGenerator[str, None]:
         stream = self.ai.prompt([{
             "role": "user",
-            "content": f"""Below, there are several Erasmus Mundus scholarships raw content, separated by "START OF PROJECT" and "END OF PROJECT".
-                            Create a MARKDOWN output that summarizes the given Erasmus Mundus scholarships.
-                            Within this markdown, add a section for each scholarship and include the following information:
+            "content": f"""Below, there are is an Erasmus Mundus scholarship raw content, delimited by "START OF SCHOLARSHIP" and "END OF SCHOLARSHIP".
+                            Create a MARKDOWN output that summarizes the given Erasmus Mundus scholarship.
+                            Within this markdown, add a bullet point for each of the following information:
                                 - Name of the scholarship
                                 - Description
                                 - Its website URL

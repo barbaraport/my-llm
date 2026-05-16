@@ -28,11 +28,13 @@ class ErasmusService(BaseService):
             if projects != []:
                 for project in projects:
                     total_projects += 1
-                    websites_content += f"START OF PROJECT {total_projects}\n\n\n\n"
-                    websites_content += project
-                    websites_content += "END OF PROJECT\n\n\n\n"
+                    website_content = f"START OF SCHOLARSHIP {total_projects}\n\n\n\n"
+                    website_content += project
+                    website_content += "\nEND OF SCHOLARSHIP\n\n\n\n"
 
-        stream =  self.summarizer.summarize(websites_content)
+                    stream =  self.summarizer.summarize(website_content)
 
-        async for chunk in stream:
-            yield chunk
+                    async for chunk in stream:
+                        yield chunk
+                        
+        yield "data: ###[ALL-SCHOLARSHIPS-DONE]###\n\n"
