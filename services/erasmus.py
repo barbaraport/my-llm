@@ -28,9 +28,9 @@ class ErasmusService(BaseService):
             if projects != []:
                 for project in projects:
                     total_projects += 1
-                    website_content = f"START OF SCHOLARSHIP {total_projects}\n\n\n\n"
+                    website_content = f"START OF SCHOLARSHIP {total_projects}\n\n"
                     website_content += project
-                    website_content += "\nEND OF SCHOLARSHIP\n\n\n\n"
+                    website_content += "\nEND OF SCHOLARSHIP\n\n"
 
                     stream =  self.summarizer.summarize(website_content)
 
