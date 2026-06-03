@@ -1,5 +1,7 @@
 .PHONY: setup reset run setup-uv reset-uv update-uv
 
+UV_VERSION := 0.11.18
+
 setup: setup-uv
 
 reset: 
@@ -11,7 +13,7 @@ run:
 	@uv run fastapi dev main.py
 
 setup-uv:
-	@curl -LsSf https://astral.sh/uv/install.sh | sh
+	@curl -LsSf https://astral.sh/uv/$(UV_VERSION)/install.sh | sh
 	@uv sync
 
 update-uv:
