@@ -16,6 +16,8 @@ class AI:
         stream = await self._connection.chat.completions.create(model=self._model_name, messages=messages, stream=True)
         
         async for chunk in stream:
+            if not chunk.choices:
+                continue
             content = chunk.choices[0].delta.content
             if content and content.strip() != "":
                 yield f"data: {content}\n\n"

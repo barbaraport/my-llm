@@ -10,21 +10,16 @@ class ErasmusService(BaseService):
     async def summarize(self) -> AsyncGenerator[str, None]:
         url = get_setting("CATALOGUE_URL")
 
-        websites_content = ""
-        first_page_content = Scraper.find_first_in_page(page=url, tag="div", attribute="class", value="ecl-content-item-block")
-        websites_content += first_page_content
-
         first_page = 1
-        last_page = int(
-            Scraper.find_first_in_page(page=url, tag="li", attribute="class", value="ecl-pagination__item ecl-pagination__item--last")
-        )
+        last_page_str = await Scraper.find_first_in_page(page=url, tag="li", attribute="class", value="ecl-pagination__item ecl-pagination__item--last")
+        last_page = int(last_page_str) if last_page_str != "" else 1
 
         total_projects = 0
-        for page in range(first_page, last_page):
+        for page in range(first_page, last_page + 1):
             wait_time = uniform(3, 7)
             await sleep(wait_time)
 
-            projects = Scraper.find_all_by_class_name(page=url + f"?page={page}", value=".ecl-content-block.ecl-card__content-block")
+            projects = await Scraper.find_all_by_selector(page=url + f"?page={page}", value=".ecl-content-block.ecl-card__content-block")
             if projects != []:
                 for project in projects:
                     total_projects += 1
