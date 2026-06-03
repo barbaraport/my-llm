@@ -20,5 +20,8 @@ class AI:
                 continue
             content = chunk.choices[0].delta.content
             if content and content.strip() != "":
-                yield f"data: {content}\n\n"
+                for line in content.splitlines():
+                    if line:
+                        yield f"data: {line}\n"
+                yield "\n"
             

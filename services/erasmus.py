@@ -1,5 +1,6 @@
 from asyncio import sleep
 from random import uniform
+import re
 from typing import AsyncGenerator
 
 from core.scraping.scraper import Scraper
@@ -12,7 +13,8 @@ class ErasmusService(BaseService):
 
         first_page = 1
         last_page_str = await Scraper.find_first_in_page(page=url, tag="li", attribute="class", value="ecl-pagination__item ecl-pagination__item--last")
-        last_page = int(last_page_str) if last_page_str != "" else 1
+        last_page_numbers_only = re.search(r"\d+", last_page_str)
+        last_page = int(last_page_numbers_only.group()) if last_page_numbers_only else 1
 
         total_projects = 0
         for page in range(first_page, last_page + 1):

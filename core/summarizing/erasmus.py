@@ -28,4 +28,5 @@ class ErasmusSummarizer(Summarizer):
         }])
           
         async for chunk in stream:
-            if chunk.strip() != "": yield chunk
+            if chunk.strip():
+                yield chunk

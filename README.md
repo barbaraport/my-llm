@@ -130,7 +130,7 @@ Clone the repository:
 
 ```bash
 git clone <repository-url>
-cd masters-summarizer-api
+cd scholarship-summarizer-api
 ```
 
 Install dependencies and create the virtual environment:
