@@ -9,6 +9,7 @@ from settings.get_setting import get_setting
 
 class ErasmusService(BaseService):
     async def summarize(self) -> AsyncGenerator[str, None]:
+        """fetches the Erasmus scholarships from the specified catalogue URL, summarizes them using the summarizer, and yields the summary as a stream of text chunks"""
         url = get_setting("CATALOGUE_URL")
 
         first_page = 1

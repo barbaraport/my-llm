@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
@@ -23,6 +25,7 @@ def get_service() -> BaseService:
             )
         )
     
+ServiceDependency = Annotated[BaseService, Depends(get_service)]
 
 @erasmus_router.get("/",
     summary="Summarize Erasmus scholarships",
@@ -36,7 +39,8 @@ def get_service() -> BaseService:
         }
     }
 )
-def erasmus_summarization(service: BaseService = Depends(get_service)):
+def erasmus_summarization(service: ServiceDependency):
+    """Endpoint to summarize Erasmus scholarships. It uses the ErasmusService to fetch and summarize the scholarships, and returns the summary as a stream of text chunks (SSE - Server-Sent Events)."""
     stream = service.summarize()
 
     async def stream_wrapper():

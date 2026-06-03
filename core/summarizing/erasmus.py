@@ -5,6 +5,7 @@ from core.summarizing.summarizer import Summarizer
 
 class ErasmusSummarizer(Summarizer): 
     async def summarize(self, content: str) -> AsyncGenerator[str, None]:
+        """summarizes the given Erasmus Mundus scholarship content and yields the summary as a stream of text chunks"""
         stream = self.ai.prompt([{
             "role": "user",
             "content": f"""Below, there is an Erasmus Mundus scholarship raw content, delimited by "START OF SCHOLARSHIP" and "END OF SCHOLARSHIP".

@@ -10,9 +10,11 @@ class AI:
         super().__init__()
 
     def _get_connection(self, api_url: str, api_key: str) -> AsyncOpenAI:
+        """creates OpenAI Async client connection"""
         return AsyncOpenAI(base_url=api_url, api_key=api_key)
 
     async def prompt(self, messages: list[Any]) -> AsyncGenerator[str, None]:
+        """sends a prompt to the OpenAI API and yields the response as a stream of text chunks"""
         stream = await self._connection.chat.completions.create(model=self._model_name, messages=messages, stream=True)
         
         async for chunk in stream:
